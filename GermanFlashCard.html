@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>German Flashcards</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #f5a623, #f76b1c, #e14d2a);
+            margin: 0;
+            color: #333;
+        }
+        .flashcard {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            text-align: center;
+            width: 350px;
+        }
+        .flashcard p {
+            margin: 15px 0;
+        }
+        .question {
+            font-size: 2rem;
+            color: #2c3e50;
+        }
+        .hint {
+            font-size: 1.2rem;
+            color: #2980b9;
+            font-style: italic;
+        }
+        .answer {
+            font-size: 1.5rem;
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .index {
+            font-size: 1rem;
+            color: #7f8c8d;
+        }
+        .button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            transition: background-color 0.3s;
+        }
+        .button-show-hint {
+            background-color: #2980b9;
+            color: white;
+        }
+        .button-show-hint:hover {
+            background-color: #1f6391;
+        }
+        .button-show-answer {
+            background-color: #27ae60;
+            color: white;
+        }
+        .button-show-answer:hover {
+            background-color: #1e8c4f;
+        }
+        .button-back {
+            background-color: #e67e22;
+            color: white;
+        }
+        .button-back:hover {
+            background-color: #cf6815;
+        }
+        .button-next {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .button-next:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="flashcard">
+        <p class="index" id="index"></p>
+        <p id="word" class="question">Click "Next" to start!</p>
+        <p id="hint" class="hint" style="display:none;"></p>
+        <p id="meaning" class="answer" style="display:none;"></p>
+        <button class="button button-show-hint" onclick="showHint()">Show Hint</button>
+        <button class="button button-show-answer" onclick="showAnswer()">Show Answer</button>
+        <button class="button button-back" onclick="previousWord()">Back</button>
+        <button class="button button-next" onclick="nextWord()">Next</button>
+    </div>
+
+    <script>
+        const vocabulary = [
+            { word: "Haus", meaning: "House", hint: "A place where you live." },
+            { word: "Baum", meaning: "Tree", hint: "A tall plant with branches and leaves." },
+            { word: "Auto", meaning: "Car", hint: "A vehicle with four wheels." },
+            { word: "Katze", meaning: "Cat", hint: "A small, furry pet that purrs." },
+            { word: "Hund", meaning: "Dog", hint: "A loyal companion that barks." }
+        ];
+
+        let currentIndex = -1;
+        let previousIndex = -1;
+        let history = [];
+
+        function updateIndex() {
+            document.getElementById("index").innerText = `Vocabulary ${currentIndex + 1} of ${vocabulary.length}`;
+        }
+
+        function nextWord() {
+            do {
+                currentIndex = Math.floor(Math.random() * vocabulary.length);
+            } while (currentIndex === previousIndex);
+            
+            history.push(previousIndex);
+            previousIndex = currentIndex;
+            document.getElementById("word").innerText = vocabulary[currentIndex].word;
+            document.getElementById("meaning").style.display = "none";
+            document.getElementById("hint").style.display = "none";
+            updateIndex();
+        }
+
+        function previousWord() {
+            if (history.length > 0) {
+                currentIndex = history.pop();
+                previousIndex = currentIndex;
+                document.getElementById("word").innerText = vocabulary[currentIndex].word;
+                document.getElementById("meaning").style.display = "none";
+                document.getElementById("hint").style.display = "none";
+                updateIndex();
+            }
+        }
+
+        function showAnswer() {
+            document.getElementById("meaning").innerText = vocabulary[currentIndex].meaning;
+            document.getElementById("meaning").style.display = "block";
+        }
+
+        function showHint() {
+            document.getElementById("hint").innerText = vocabulary[currentIndex].hint;
+            document.getElementById("hint").style.display = "block";
+        }
+    </script>
+
+</body>
+</html>
